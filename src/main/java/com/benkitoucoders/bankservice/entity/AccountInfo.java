@@ -1,13 +1,13 @@
 package com.benkitoucoders.bankservice.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -16,8 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class AccountInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String accountName;
-    private String accountBalance;
+    private BigDecimal accountBalance;
     private String accountNumber;
 }

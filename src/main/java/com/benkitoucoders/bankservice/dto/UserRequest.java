@@ -17,5 +17,4 @@ public class UserRequest {
     private String phoneNumber;
     private String address;
     private String alternativePhoneNumber;
-    private String status;
 }
