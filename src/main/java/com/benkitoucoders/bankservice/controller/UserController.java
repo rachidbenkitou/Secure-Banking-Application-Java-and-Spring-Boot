@@ -21,13 +21,22 @@ public class UserController {
 
     )
     @ApiResponse(
-
+        responseCode = "201",
+            description = "HTTP Status CREATED"
     )
     @PostMapping
     public BankResponse createAccount(@RequestBody UserRequest userRequest) {
         return userService.createAccount(userRequest);
     }
+    @Operation(
+            summary = "Balance Enquiry",
+            description = "Given an account number, check how much the use has"
 
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status SUCCESS"
+    )
     @GetMapping("/balanceEnquiry")
     public BankResponse balanceEnquiry(@RequestBody EnquiryRequest enquiryRequest) {
         return userService.balanceEnquiry(enquiryRequest);

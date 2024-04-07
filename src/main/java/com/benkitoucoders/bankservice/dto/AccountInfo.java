@@ -1,7 +1,6 @@
-package com.benkitoucoders.bankservice.entity;
+package com.benkitoucoders.bankservice.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +12,17 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
 public class AccountInfo {
-    @Id
+    @Schema(
+            name = "User Account Name"
+    )
     private String accountName;
+    @Schema(
+            name = "User Account Balance"
+    )
     private BigDecimal accountBalance;
+    @Schema(
+            name = "User Account Number"
+    )
     private String accountNumber;
 }
