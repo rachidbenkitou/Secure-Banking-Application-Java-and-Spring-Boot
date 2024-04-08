@@ -1,10 +1,13 @@
-package com.benkitoucoders.bankservice.service;
+package com.benkitoucoders.bankservice.service.impl;
 
 import com.benkitoucoders.bankservice.dto.*;
 import com.benkitoucoders.bankservice.entity.User;
 import com.benkitoucoders.bankservice.repository.UserRepository;
+import com.benkitoucoders.bankservice.service.EmailService;
+import com.benkitoucoders.bankservice.service.TransactionService;
+import com.benkitoucoders.bankservice.service.UserService;
 import com.benkitoucoders.bankservice.utils.AccountUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +15,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;

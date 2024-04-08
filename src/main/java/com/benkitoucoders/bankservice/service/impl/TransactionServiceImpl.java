@@ -1,8 +1,9 @@
-package com.benkitoucoders.bankservice.service;
+package com.benkitoucoders.bankservice.service.impl;
 
 import com.benkitoucoders.bankservice.dto.TransactionDto;
 import com.benkitoucoders.bankservice.entity.Transaction;
 import com.benkitoucoders.bankservice.repository.TransactionRepository;
+import com.benkitoucoders.bankservice.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class TransactionServiceImpl implements TransactionService {
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
     @Override
     public void saveTransaction(TransactionDto transactionDto) {
