@@ -5,6 +5,7 @@ import com.benkitoucoders.bankservice.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,6 +19,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
@@ -55,6 +57,7 @@ public class EmailServiceImpl implements EmailService {
             FileSystemResource file = new FileSystemResource(new File(emailDetails.getAttachment()));
             mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
             javaMailSender.send(mimeMessage);
+            log.info(file.getFilename()+" has been sent to user with email  "+ emailDetails.getRecipient());
         } catch (Exception messagingException){
             throw new RuntimeException(messagingException);
         }

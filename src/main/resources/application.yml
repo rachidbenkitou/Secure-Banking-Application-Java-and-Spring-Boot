@@ -7,7 +7,7 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username: rachidbenkitou2021@gmail.com
     password: kxmd uimm jntc qxqq
     properties:
@@ -15,6 +15,8 @@ spring:
         smtp:
           auth: true
           starttls:
+            enable: true
+          ssl:
             enable: true
 
   jpa:

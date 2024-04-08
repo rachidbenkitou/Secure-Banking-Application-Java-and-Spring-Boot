@@ -1,9 +1,11 @@
 package com.benkitoucoders.bankservice.service.impl;
 
+import com.benkitoucoders.bankservice.dto.EmailDetails;
 import com.benkitoucoders.bankservice.entity.Transaction;
 import com.benkitoucoders.bankservice.entity.User;
 import com.benkitoucoders.bankservice.repository.TransactionRepository;
 import com.benkitoucoders.bankservice.repository.UserRepository;
+import com.benkitoucoders.bankservice.service.EmailService;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -25,6 +27,7 @@ import java.util.List;
 public class BankStatement {
     private TransactionRepository transactionRepository;
     private UserRepository userRepository;
+    private EmailService emailService;
     private static final String FILE = "C:\\Users\\PC\\Desktop\\Projects\\1-Secure-Banking-Application-Java-and-Spring-Boot\\MyStatement.pdf";
 
     /**
@@ -35,12 +38,11 @@ public class BankStatement {
     public List<Transaction> generateStatement(String accountNumber, String startDate, String endDate) throws FileNotFoundException, DocumentException {
         LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
         LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
-        System.out.println(accountNumber);
         List<Transaction> transactionList = transactionRepository.findAll()
                 .stream()
-//                .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
-//                .filter(transaction -> transaction.getCreatedAt().isAfter(start))
-//                .filter(transaction -> transaction.getCreatedAt().isEqual(end))
+                .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
+                .filter(transaction -> transaction.getCreatedAt().isAfter(start))
+                .filter(transaction -> transaction.getCreatedAt().isEqual(end))
                 .toList();
 
         User user = userRepository.findByAccountNumber(accountNumber);
@@ -118,6 +120,15 @@ public class BankStatement {
         document.add(transactionsTable);
 
         document.close();
+
+        EmailDetails emailDetails = EmailDetails.builder()
+                .recipient(user.getEmail())
+                .subject("STATEMENT OF ACCOUNT")
+                .messageBody("Kindly find your requested statement attached!")
+                .attachment(FILE)
+                .build();
+
+        emailService.sendEmailWithAttachment(emailDetails);
 
         return transactionList;
 
