@@ -14,6 +14,7 @@ public class UserRequest {
     private String gender;
     private String stateOfOrigin;
     private String email;
+    private String password;
     private String phoneNumber;
     private String address;
     private String alternativePhoneNumber;

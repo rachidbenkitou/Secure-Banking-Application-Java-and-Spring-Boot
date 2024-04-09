@@ -21,13 +21,14 @@ public class UserController {
 
     )
     @ApiResponse(
-        responseCode = "201",
+            responseCode = "201",
             description = "HTTP Status CREATED"
     )
     @PostMapping
     public BankResponse createAccount(@RequestBody UserRequest userRequest) {
         return userService.createAccount(userRequest);
     }
+
     @Operation(
             summary = "Balance Enquiry",
             description = "Given an account number, check how much the use has"
@@ -60,5 +61,10 @@ public class UserController {
     @PostMapping("transfer")
     public BankResponse transfer(@RequestBody TransferRequest request) {
         return userService.transfer(request);
+    }
+
+    @PostMapping("/login")
+    public BankResponse login(@RequestBody LoginDto loginDto) {
+        return userService.login(loginDto);
     }
 }

@@ -1,13 +1,19 @@
 package com.benkitoucoders.bankservice.service.impl;
 
 import com.benkitoucoders.bankservice.dto.*;
+import com.benkitoucoders.bankservice.entity.Role;
 import com.benkitoucoders.bankservice.entity.User;
 import com.benkitoucoders.bankservice.repository.UserRepository;
+import com.benkitoucoders.bankservice.security.JwtTokenProvider;
 import com.benkitoucoders.bankservice.service.EmailService;
 import com.benkitoucoders.bankservice.service.TransactionService;
 import com.benkitoucoders.bankservice.service.UserService;
 import com.benkitoucoders.bankservice.utils.AccountUtils;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +21,15 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final EmailService emailService;
-    private final TransactionService transactionService;
+    private UserRepository userRepository;
+    private EmailService emailService;
+    private TransactionService transactionService;
+    private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
 
     /**
      * Creating an account - saving a new user into the db
@@ -46,8 +55,11 @@ public class UserServiceImpl implements UserService {
                 .accountNumber(AccountUtils.generateAccountNumber())
                 .accountBalance(BigDecimal.ZERO)
                 .email(userRequest.getEmail())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .phoneNumber(userRequest.getPhoneNumber())
+                .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
                 .status("ACTIVE")
+                .role(Role.ROLE_ADMIN)
                 .build();
         User savedUser = userRepository.save(newUser);
         // Send Email Alter
@@ -250,4 +262,24 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public BankResponse login(LoginDto loginDto) {
+        Authentication authentication = null;
+        authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
+        );
+
+//        EmailDetails loginAlert = EmailDetails.builder()
+//                .subject("You're logged in!")
+//                .recipient(loginDto.getEmail())
+//                .messageBody("You logged into your account. If you did not initiate this request, please contact your bank.")
+//                .build();
+//
+//        emailService.sendEmailAlert(loginAlert);
+        return BankResponse.builder()
+                .responseCode("Login Success")
+                .responseMessage(jwtTokenProvider.generateToken(authentication))
+                .build();
+
+    }
 }
